@@ -7,10 +7,22 @@ import User from "./models/userModel.js";
 import bodyParser from "body-parser"; 
 import cookieParser from "cookie-parser";
 import session from "express-session";
+import dotenv  from "dotenv"
 
+dotenv.config()
 
 const app = express();
 app.use(express.json());
+
+const corsOptions ={
+   origin: process.env.HEROKU_LINK, 
+   methods: 'GET,POST,PATCH,DELETE,OPTIONS',
+   credentials:true,            //access-control-allow-credentials:true
+   optionSuccessStatus:200,
+}
+
+app.use(cors(corsOptions)) // Use this after the variable declaration
+// app.use(cors());
 // const db = require("./models");
 const port= process.env.DB_PORT
 try {
@@ -27,11 +39,40 @@ db.sync({force: true}).then(() => {
     console.log("Drop and re-sync db.");
   });
 */
-app.use(cors({
-    origin: ["http://localhost:3000"],
-    methods: ["GET", "POST", "PATCH", "DELETE", "PUT"],
-    credentials: true 
-}));
+// app.use(cors({
+//     origin: ["https://quantumquacks-frontend.herokuapp.com/"],
+//     methods: ["GET", "POST", "PATCH", "DELETE", "PUT"],
+//     credentials: true 
+// }));
+
+
+
+
+// app.use(function (req, res, next) {
+
+//     // Website you wish to allow to connect
+//     res.setHeader('Access-Control-Allow-Origin', '*');
+
+//     // Request methods you wish to allow
+//     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+
+//     // Request headers you wish to allow
+//     res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+
+//     // Set to true if you need the website to include cookies in the requests sent
+//     // to the API (e.g. in case you use sessions)
+//     res.setHeader('Access-Control-Allow-Credentials', true);
+
+//     // Pass to next layer of middleware
+//     next();
+// });
+
+
+
+// app.use(cors({origin: '*'}));
+
+
+
 app.use(cookieParser()); 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(session({
@@ -50,7 +91,6 @@ app.use(session({
 app.use('/', userRoutes); 
 //app.use('/products', productRoutes);
 // db.Sequelize.sync().then(() => {
-    app.listen(port, () => console.log(`Server running at port ${port}...`));
+    const PORT = process.env.PORT || 5000;
 
-
-
+app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
