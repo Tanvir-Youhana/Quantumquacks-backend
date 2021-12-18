@@ -16,7 +16,7 @@ app.use(express.json());
 
 const corsOptions ={
    origin: process.env.HEROKU_LINK, 
-   methods: 'GET,POST,PATCH,DELETE,OPTIONS',
+   methods: 'GET,POST,PATCH,DELETE,OPTIONS,PUT',
    credentials:true,            //access-control-allow-credentials:true
    optionSuccessStatus:200,
 }
